@@ -1,7 +1,10 @@
 .Cell{
-    width: 90px;
-    height: 90px;
-    border: black solid 2px;
-    /* margin: 0px; */
+    width: 100px;
+    height: 100px;
+    border-radius: 1px;
+    background-color: #263238;
+    transition: background-color 0.5s ease;
 }
-
+.Cell-Lit{
+    background-color: #00bcd4;
+}

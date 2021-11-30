@@ -13,7 +13,6 @@ class Cell extends Component{
     }
     handleToggle(){
         // toggles cells above, below, right and to left
-        console.log(this.props.pos)
         const [row, col] = this.props.pos
         this.props.toggle(this.props.pos)
         this.props.toggle([row, col+1])
@@ -22,15 +21,10 @@ class Cell extends Component{
         this.props.toggle([row-1, col])
     }
     render() {
-        const {mode} = this.props
-        let color=''
-        if(mode) color='#11a6a6'
-        else color='#303a3a'
+        let classes = 'Cell' + (this.props.mode ? ' Cell-Lit' : '')
 
         return (
-            <td className='Cell' onClick={this.handleToggle} style={{backgroundColor: color}}>
-                
-            </td>
+            <td className={classes} onClick={this.handleToggle}></td>
         )
     }
 }

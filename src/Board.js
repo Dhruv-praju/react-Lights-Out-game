@@ -4,7 +4,9 @@ import './Board.css'
 
 class Board extends Component{
     static defaultProps = {
-        dimension:5
+        nrows:5,
+        ncols:5,
+        chanceLightsOn:0.25
     }
     constructor(props){
         super(props)
@@ -12,21 +14,23 @@ class Board extends Component{
             // grid that represents the board
             // 0 --> OFF
             // 1 --> ON
-            grid:[
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 1],
-                [0, 0, 0, 1, 1],
-            ],
-            nLit:3
+            grid:this.initGrid(),
+            hasWon:false
         }
         this.toggle = this.toggle.bind(this)
     }
     initGrid(){
         /** It initializes grid with binary matrix */
         let grid = []
-
+        for(let y=0; y<this.props.nrows; y++){
+            let row = []
+            for(let x=0; x<this.props.ncols; x++){
+                if(Math.random() < this.props.chanceLightsOn) row.push(1)
+                else row.push(0)
+            }
+            grid.push(row)
+        }
+        return grid
     }
     genGridCells(grid = this.state.grid){
         // It returns the grid with cells by reading binary grid matrix of the state
@@ -37,16 +41,7 @@ class Board extends Component{
 
         return gridCells
     }
-    countLit(grid){
-        // returns no. of lit Cells on the board
-        let count=0
-        grid.forEach(row => {
-            row.forEach(m => {
-                if(m) count+=1
-            });
-        });
-        return count
-    }
+    
     toggle(pos){
         // It toggles the given grid position using setState
         function duplicate(grid){
@@ -56,14 +51,12 @@ class Board extends Component{
             return newGrid
         }
 
-        console.log('toggling :'+pos);
         this.setState(currSt=>{
 
             let newGrid = duplicate(currSt.grid)
             const [row, col] = pos
 
             if((row>=0&&row<=newGrid.length-1) && (col>=0&&col<=newGrid.length-1)){
-                console.log('checking');
                 if(newGrid[row][col]){
                     newGrid[row][col]=0
                 }
@@ -71,19 +64,39 @@ class Board extends Component{
                     newGrid[row][col]=1
                 }
             }
+
+            let hasWon = newGrid.every(row => row.every(cell => !cell))
+
             return {
-                nLit: this.countLit(newGrid),
-                grid: newGrid
+                grid: newGrid,
+                hasWon: hasWon
             }
 
         })
     }
     
+
+        
     render() {
+        
         return (
-            <table className='Board'>
-                {this.genGridCells()}
-            </table>
+            this.state.hasWon
+            ? 
+            <div className='winner'>
+                <div className='neon-orange'>you</div>
+                <div className='neon-blue'>win</div>
+            </div>
+            :
+            <div>
+                <div className='Board-title'>
+                    <div className='neon-orange'>Lights</div>
+                    <div className='neon-blue'>Out</div>
+                </div>
+                <table className='Board'>
+                    {this.genGridCells()}
+                </table>
+                
+            </div>
         )
     }
 }
