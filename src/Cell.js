@@ -28,9 +28,9 @@ class Cell extends Component{
         else color='#303a3a'
 
         return (
-            <div className='Cell' onClick={this.handleToggle} style={{backgroundColor: color}}>
+            <td className='Cell' onClick={this.handleToggle} style={{backgroundColor: color}}>
                 
-            </div>
+            </td>
         )
     }
 }

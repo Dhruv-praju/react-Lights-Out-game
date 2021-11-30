@@ -23,12 +23,17 @@ class Board extends Component{
         }
         this.toggle = this.toggle.bind(this)
     }
-    genGrid(grid = this.state.grid){
+    initGrid(){
+        /** It initializes grid with binary matrix */
+        let grid = []
+
+    }
+    genGridCells(grid = this.state.grid){
         // It returns the grid with cells by reading binary grid matrix of the state
         function getRow(arr, rowIdx, obj){
-            return arr.map((m, i) => <Cell mode={m} pos={[rowIdx,i]} toggle={obj.toggle}/>)
+            return <tr key={rowIdx}>{arr.map((m, i) => <Cell mode={m} key={`${rowIdx},${i}`} pos={[rowIdx,i]} toggle={obj.toggle}/>)}</tr>
         }
-        const gridCells = grid.map((row, idx) => getRow(row, idx, this))
+        const gridCells = <tbody>{grid.map((row, idx) => getRow(row, idx, this))}</tbody>
 
         return gridCells
     }
@@ -76,9 +81,9 @@ class Board extends Component{
     
     render() {
         return (
-            <div className='Board'>
-                {this.genGrid()}
-            </div>
+            <table className='Board'>
+                {this.genGridCells()}
+            </table>
         )
     }
 }
